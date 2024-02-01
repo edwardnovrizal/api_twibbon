@@ -1,0 +1,22 @@
+{
+  "name": "api_gambar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.0",
+    "express": "^4.18.2",
+    "mongoose": "^8.1.1",
+    "mongoose-unique-validator": "^4.0.0",
+    "node-cache": "^5.1.2",
+    "nodemon": "^3.0.3",
+    "puppeteer": "^21.9.0"
+  }
+}
