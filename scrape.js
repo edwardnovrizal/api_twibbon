@@ -6,4 +6,4 @@ const ScrapeTrending = require("./src/utils/scrapeTrending");
 
 // ScrapePopular();
 
-ScrapeDetail("/gerakanbumilsehat");
+// ScrapeDetail("/gerakanbumilsehat");
