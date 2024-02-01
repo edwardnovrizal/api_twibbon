@@ -8,9 +8,9 @@ async function ScrapeDetail(href) {
     const value = myCache.get(href);
     if (value == undefined) {
       const browser = await puppeteer.launch({
-        headless: false,
-        executablePath: executablePath(),
-        //   executablePath: "/usr/bin/chromium-browser",
+        headless: true,
+        // executablePath: executablePath(),
+        executablePath: "/usr/bin/chromium-browser",
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
