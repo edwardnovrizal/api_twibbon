@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "twibbon",
+      name: "api-twibbon",
       script: "npm run live",
     },
   ],
