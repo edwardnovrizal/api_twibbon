@@ -10,8 +10,8 @@ async function ScrapeSearch(kw) {
     if (value == undefined) {
       const browser = await puppeteer.launch({
         headless: true,
-        // executablePath: executablePath(),
-        executablePath: "/usr/bin/chromium-browser",
+        executablePath: executablePath(),
+        // executablePath: "/usr/bin/chromium-browser",
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
