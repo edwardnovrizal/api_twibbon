@@ -4,16 +4,15 @@ const NodeCache = require("node-cache");
 const myCache = new NodeCache({ stdTTL: 30 * 24 * 60 * 60, checkperiod: 24 * 60 * 60 });
 
 async function ScrapePopular() {
+  const browser = await puppeteer.launch({
+    headless: true,
+    // executablePath: executablePath(),
+    executablePath: "/usr/bin/chromium-browser",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   try {
     const value = myCache.get("popular");
     if (value == undefined) {
-      const browser = await puppeteer.launch({
-        headless: true,
-        // executablePath: executablePath(),
-        executablePath: "/usr/bin/chromium-browser",
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      });
-
       const page = await browser.newPage();
 
       await page.goto("https://www.twibbonize.com/explore/?sort=support");
@@ -41,7 +40,7 @@ async function ScrapePopular() {
       });
 
       const like = await page.$$eval("div > p.t-campaign-card__support", (el) => {
-        return el.map((option) => { 
+        return el.map((option) => {
           const cleanedString = option.textContent
             .trim()
             .replace(/\n+/g, " ")
@@ -72,13 +71,14 @@ async function ScrapePopular() {
       }));
       await browser.close();
       myCache.set("popular", data, 86400);
-
+      
       return data;
     } else {
       return value;
     }
   } catch (error) {
     console.log(error);
+    await browser.close();
     return error;
   }
 }

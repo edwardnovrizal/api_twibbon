@@ -4,15 +4,15 @@ const NodeCache = require("node-cache");
 const myCache = new NodeCache({ stdTTL: 30 * 24 * 60 * 60, checkperiod: 24 * 60 * 60 });
 
 async function ScrapeTrending() {
+  const browser = await puppeteer.launch({
+    headless: true,
+    // executablePath: executablePath(),
+    executablePath: "/usr/bin/chromium-browser",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   try {
     const value = myCache.get("trending");
     if (value == undefined) {
-      const browser = await puppeteer.launch({
-        headless: true,
-        // executablePath: executablePath(),
-        executablePath: "/usr/bin/chromium-browser",
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      });
 
       const page = await browser.newPage();
 
@@ -74,13 +74,14 @@ async function ScrapeTrending() {
 
       await browser.close();
       myCache.set("trending", data, 86400);
-
+      
       return data;
     } else {
       return value;
     }
   } catch (error) {
     console.log(error);
+    await browser.close();
     return error;
   }
 }

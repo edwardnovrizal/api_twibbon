@@ -5,16 +5,15 @@ const myCache = new NodeCache({ stdTTL: 30 * 24 * 60 * 60, checkperiod: 24 * 60 
 
 async function ScrapeSearch(kw) {
   const keyword = kw.toLowerCase();
+  const browser = await puppeteer.launch({
+    headless: true,
+    // executablePath: executablePath(),
+    executablePath: "/usr/bin/chromium-browser",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   try {
     const value = myCache.get(keyword);
     if (value == undefined) {
-      const browser = await puppeteer.launch({
-        headless: true,
-        // executablePath: executablePath(),
-        executablePath: "/usr/bin/chromium-browser",
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      });
-
       const page = await browser.newPage();
 
       await page.goto(`https://www.twibbonize.com/explore/?sort=support&q=${keyword}`);
@@ -80,7 +79,8 @@ async function ScrapeSearch(kw) {
       return value;
     }
   } catch (error) {
-      console.log(error);
+    console.log(error);
+    await browser.close();
     return error;
   }
 }

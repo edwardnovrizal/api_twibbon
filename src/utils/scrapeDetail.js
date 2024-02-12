@@ -4,16 +4,15 @@ const NodeCache = require("node-cache");
 const myCache = new NodeCache({ stdTTL: 30 * 24 * 60 * 60, checkperiod: 24 * 60 * 60 });
 
 async function ScrapeDetail(href) {
+  const browser = await puppeteer.launch({
+    headless: true,
+    // executablePath: executablePath(),
+    executablePath: "/usr/bin/chromium-browser",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   try {
     const value = myCache.get(href);
     if (value == undefined) {
-      const browser = await puppeteer.launch({
-        headless: true,
-        // executablePath: executablePath(),
-        executablePath: "/usr/bin/chromium-browser",
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
-      });
-
       const page = await browser.newPage();
 
       await page.goto(`https://www.twibbonize.com/${href}`, { waitUntil: "networkidle2" });
@@ -72,6 +71,7 @@ async function ScrapeDetail(href) {
       return value;
     }
   } catch (error) {
+    await browser.close();
     return error;
   }
 }
